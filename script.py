@@ -6,6 +6,7 @@ W=0
 B=0
 T=0
 
+
 def leggiStrada(nomeFile):
     fin = open(nomeFile)
     riga = fin.readline().split()
@@ -32,3 +33,4 @@ def leggiStrada(nomeFile):
 if __name__ == '__main__':
     richieste = leggiStrada("/home/viga/PycharmProjects/HashCode/a_example.in")
     print(richieste)
+
