@@ -105,21 +105,24 @@ def funzione(taxi,richieste):
 
 if __name__ == '__main__':
 
-    input="/home/andrea/Scrivania/Hash_Code_2018/c.in"
-    output="/home/andrea/Scrivania/Hash_Code_2018/c.out"
 
-    richieste = leggiStrada(input)
-    conta=0
-    while(funzione(taxi,richieste)!=-1):
-        conta+=1
-        print("Computing %d ...." % conta)
+    for i in ('a','b','c','d','e'):
 
-    #Creo un file pulito
-    fout = open(output,"w")
-    fout.close()
+        input = i+ ".in"
+        output = i+ ".out"
+        print ("Input file ---> %s.in" % i)
+        richieste = leggiStrada(input)
+        conta=0
+        while(funzione(taxi,richieste)!=-1):
+            conta+=1
+            print("Computing %d ...." % conta)
 
-    #Scrivo sul file le ride effettuate
-    fout = open(output, "a")
-    for vett in taxi:
-        fout.write(str(vett[4])+vett[3]+"\n")
-    fout.close
+        #Creo un file pulito
+        fout = open(output,"w")
+        fout.close()
+
+        #Scrivo sul file le ride effettuate
+        fout = open(output, "a")
+        for vett in taxi:
+            fout.write(str(vett[4])+vett[3]+"\n")
+        fout.close
