@@ -38,13 +38,11 @@ def leggiStrada(nomeFile):
     T=PrimaRiga[5]
     for i in range(F):
        taxi.append([0,0,0,"",0]) # x-ora, y-ora, dist-percorsa stringa da stampare e numero di ride
-    return sorted(richieste, key=itemgetter(4))
+    return richieste
 
 
 
 def calcolaPunteggio(ride,x,y,t):# xy = dove sono ora
-    #("SOSOSO")
-    #print(ride,x,y,t)
     dist = distanza(x,y,ride[0],ride[1]) #distanza per arrivare partenza
     tragitto = distanza(ride[0],ride[1],ride[2],ride[3])
     if dist+t+tragitto>ride[5] or dist+t+tragitto>T:
@@ -58,30 +56,33 @@ def calcolaPunteggio(ride,x,y,t):# xy = dove sono ora
 
 def funzione(taxi,richieste,output):
     for vett in taxi:
-        max=-1
-        indice=-1
-        for i in range(F):
-            temp = calcolaPunteggio(richieste[i],taxi[i][0],taxi[i][1],taxi[i][2])
+        if len(richieste) == 0:
+            return
+        max=0
+        indice= 0
+        i=0
+        for i in range(len(richieste)):
+            temp = calcolaPunteggio(richieste[i],vett[0],vett[1],vett[4])
             if temp>max:
                 max = temp
-                indice = richieste[i][6]
-        vett[3] = (" "+str(indice))
+                indice = i
+
+        vett[3] = vett[3]+" "+str(richieste[indice][6])
+        #print(richieste[indice])
         vett[2] = vett[2]+distanza(vett[0],vett[1],richieste[indice][2],richieste[indice][3])
         vett[0] = richieste[indice][2]
         vett[1] = richieste[indice][3]
         vett[4] += 1
         del richieste[indice]
-    fout = open(output, "w")
+    fout = open(output,"w")
+    fout.close()
+    fout = open(output, "a")
     for vett in taxi:
         fout.write(str(vett[4])+vett[3]+"\n")
-
+    fout.close
 
 
 if __name__ == '__main__':
-    richieste = leggiStrada("/home/viga/PycharmProjects/HashCode/a_example.in")
-    funzione(taxi,richieste,"/home/viga/PycharmProjects/HashCode/a_example.txt")
-
-
-
-
-
+    richieste = leggiStrada("/home/viga/PycharmProjects/Hash/setC.in")
+    for i in range(100):
+        funzione(taxi,richieste,"/home/viga/PycharmProjects/Hash/outC")
