@@ -66,40 +66,25 @@ def funzione(taxi,richieste,output):
             if temp>max:
                 max = temp
                 indice = i
-        vett[3] = (" "+str(richieste[indice][6]))
+        vett[3] = vett[3]+(" \n""+str(richieste[indice][6]))
         #print(richieste[indice])
         vett[2] = vett[2]+distanza(vett[0],vett[1],richieste[indice][2],richieste[indice][3])
         vett[0] = richieste[indice][2]
         vett[1] = richieste[indice][3]
         vett[4] += 1
         del richieste[indice]
-    fout = open(output, "w")
-    for vett in taxi:
-        fout.write(str(vett[4])+vett[3]+"\n")
-    fout.close
-def funzione2():
-    for vett in taxi:
-        max=0
-        indice= 0
-        i=0
-        for i in range(len(richieste)):
-            temp = calcolaPunteggio(richieste[i],vett[0],vett[1],vett[4])
-            if temp>max:
-                max = temp
-                indice = i
-        vett[3] = (" "+str(richieste[indice][6]))
-        #print(richieste[indice])
-        vett[2] = vett[2]+distanza(vett[0],vett[1],richieste[indice][2],richieste[indice][3])
-        vett[0] = richieste[indice][2]
-        vett[1] = richieste[indice][3]
-        vett[4] += 1
-        del richieste[indice]
-    fout = open(output, "w")
-    for vett in taxi:
-        fout.write(str(vett[4])+vett[3]+"\n")
-    fout.close
+
+
+
 
 if __name__ == '__main__':
-    richieste = leggiStrada("/home/viga/PycharmProjects/Hash/setE.in")
-    for i in range(10):
-        funzione(taxi,richieste,"/home/viga/PycharmProjects/Hash/outE")
+    richieste = leggiStrada("/home/andrea/Scrivania/Hash_Code_2018/d.in")
+    for i in range(10000):
+        funzione(taxi,richieste,"/home/andrea/Scrivania/Hash_Code_2018/d.out")
+    fout = open("/home/andrea/Scrivania/Hash_Code_2018/d.out", "a")
+
+    for vett in taxi:
+        print (vett[3])
+    for vett in taxi:
+        fout.write(str(vett[4])+vett[3]+"\n")
+    fout.close

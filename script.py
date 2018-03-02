@@ -1,5 +1,5 @@
-import numpy as np
 from operator import itemgetter
+
 R=0
 C=0
 F=0
@@ -11,7 +11,16 @@ taxi = []
 lista = []
 
 def distanza(a,b,x,y):
-    return np.abs(a-x)+np.abs(b-y)
+    if (a-x)<0:
+        A=-(a-x)
+    else:
+        A=a-x
+    if (b-y)<0:
+        B=-(b-y)
+    else:
+        B=b-y
+
+    return A+B
 
 def leggiStrada(nomeFile):
     fin = open(nomeFile,"r")
@@ -29,6 +38,8 @@ def leggiStrada(nomeFile):
             ride.append(n)
         ride.append(i)
         richieste.append(ride)
+
+    #Ride contiene [x,y  a,b  s,f  posizione]
     global R,C,F,W,B,T
     R=PrimaRiga[0]
     C=PrimaRiga[1]
@@ -44,17 +55,17 @@ def leggiStrada(nomeFile):
 
 def calcolaPunteggio(ride,x,y,t):# xy = dove sono ora
     dist = distanza(x,y,ride[0],ride[1]) #distanza per arrivare partenza
-    tragitto = distanza(ride[0],ride[1],ride[2],ride[3])
+    tragitto = distanza(ride[0],ride[1],ride[2],ride[3]) #distanza da partenza ad arrivo
     if dist+t+tragitto>ride[5] or dist+t+tragitto>T:
-        return 0
-    if dist+tragitto<=ride[4]:
+        return -800000
+    if t+dist+tragitto<=ride[4]:
         b=B
     else:
         b=0
-    return tragitto+b
+    return tragitto+b-dist*0.5
 
 
-def funzione(taxi,richieste,output):
+def funzione(taxi,richieste):
     for vett in taxi:
         if len(richieste) == 0:
             return
@@ -62,7 +73,7 @@ def funzione(taxi,richieste,output):
         indice= 0
         i=0
         for i in range(len(richieste)):
-            temp = calcolaPunteggio(richieste[i],vett[0],vett[1],vett[4])
+            temp = calcolaPunteggio(richieste[i],vett[0],vett[1],vett[2])
             if temp>max:
                 max = temp
                 indice = i
@@ -74,15 +85,23 @@ def funzione(taxi,richieste,output):
         vett[1] = richieste[indice][3]
         vett[4] += 1
         del richieste[indice]
+        if len(richieste) == 0:
+            return
+
+
+
+
+if __name__ == '__main__':
+
+    input="/home/andrea/Scrivania/Hash_Code_2018/d.in"
+    output="/home/andrea/Scrivania/Hash_Code_2018/d.out"
+    richieste = leggiStrada(input)
+    for i in range(1000000000000):
+        funzione(taxi,richieste)
+
     fout = open(output,"w")
     fout.close()
     fout = open(output, "a")
     for vett in taxi:
         fout.write(str(vett[4])+vett[3]+"\n")
     fout.close
-
-
-if __name__ == '__main__':
-    richieste = leggiStrada("/home/viga/PycharmProjects/Hash/setC.in")
-    for i in range(100):
-        funzione(taxi,richieste,"/home/viga/PycharmProjects/Hash/outC")
