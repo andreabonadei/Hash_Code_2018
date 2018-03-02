@@ -57,19 +57,22 @@ def calcolaPunteggio(ride,x,y,t):# xy = dove sono ora
     dist = distanza(x,y,ride[0],ride[1]) #distanza per arrivare partenza
     tragitto = distanza(ride[0],ride[1],ride[2],ride[3]) #distanza da partenza ad arrivo
     if dist+t+tragitto>ride[5] or dist+t+tragitto>T:
-        return -800000
+        return -8000000000
     if t+dist+tragitto<=ride[4]:
         b=B
     else:
         b=0
-    return tragitto+b-dist*0.5
+    return tragitto+b-dist*0.3
 
+# Scartiamo sempre le ride più brevi perchè hanno un punteggio basso
+#Con tragitto+b-dist*0.5 punteggio massimo per il file C
+#
 
 def funzione(taxi,richieste):
     for vett in taxi:
         if len(richieste) == 0:
-            return
-        max=0
+            return -1
+        max=-800000099999
         indice= 0
         i=0
         for i in range(len(richieste)):
@@ -86,19 +89,21 @@ def funzione(taxi,richieste):
         vett[4] += 1
         del richieste[indice]
         if len(richieste) == 0:
-            return
+            return -1
+    return 0
 
 
 
 
 if __name__ == '__main__':
 
-    input="/home/andrea/Scrivania/Hash_Code_2018/d.in"
-    output="/home/andrea/Scrivania/Hash_Code_2018/d.out"
+    input="/home/andrea/Scrivania/Hash_Code_2018/c.in"
+    output="/home/andrea/Scrivania/Hash_Code_2018/c.out"
     richieste = leggiStrada(input)
-    for i in range(1000000000000):
-        funzione(taxi,richieste)
-
+    conta=0
+    while(funzione(taxi,richieste)!=-1):
+        conta+=1
+        print("Computing %d ...." % conta)
     fout = open(output,"w")
     fout.close()
     fout = open(output, "a")
