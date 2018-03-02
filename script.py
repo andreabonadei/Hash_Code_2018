@@ -1,14 +1,20 @@
 import numpy as np
+from operator import itemgetter
 R=0
 C=0
 F=0
 W=0
 B=0
 T=0
+t=0 # contatore tempo
+taxi = []
+lista = []
 
+def distanza(a,b,x,y):
+    return np.abs(a-x)+np.abs(b-y)
 
 def leggiStrada(nomeFile):
-    fin = open(nomeFile)
+    fin = open(nomeFile,"r")
     riga = fin.readline().split()
     richieste = []
     PrimaRiga = []
@@ -21,16 +27,61 @@ def leggiStrada(nomeFile):
         for j in range(len(riga)):
             n = int(riga[j])
             ride.append(n)
+        ride.append(i)
         richieste.append(ride)
+    global R,C,F,W,B,T
     R=PrimaRiga[0]
     C=PrimaRiga[1]
     F=PrimaRiga[2]
     W=PrimaRiga[3]
     B=PrimaRiga[4]
     T=PrimaRiga[5]
-    return richieste
+    for i in range(F):
+       taxi.append([0,0,0,"",0]) # x-ora, y-ora, dist-percorsa stringa da stampare e numero di ride
+    return sorted(richieste, key=itemgetter(4))
+
+
+
+def calcolaPunteggio(ride,x,y,t):# xy = dove sono ora
+    #("SOSOSO")
+    #print(ride,x,y,t)
+    dist = distanza(x,y,ride[0],ride[1]) #distanza per arrivare partenza
+    tragitto = distanza(ride[0],ride[1],ride[2],ride[3])
+    if dist+t+tragitto>ride[5] or dist+t+tragitto>T:
+        return 0
+    if dist+tragitto<=ride[4]:
+        b=B
+    else:
+        b=0
+    return tragitto+b
+
+
+def funzione(taxi,richieste,output):
+    for vett in taxi:
+        max=-1
+        indice=-1
+        for i in range(F):
+            temp = calcolaPunteggio(richieste[i],taxi[i][0],taxi[i][1],taxi[i][2])
+            if temp>max:
+                max = temp
+                indice = richieste[i][6]
+        vett[3] = (" "+str(indice))
+        vett[2] = vett[2]+distanza(vett[0],vett[1],richieste[indice][2],richieste[indice][3])
+        vett[0] = richieste[indice][2]
+        vett[1] = richieste[indice][3]
+        vett[4] += 1
+        del richieste[indice]
+    fout = open(output, "w")
+    for vett in taxi:
+        fout.write(str(vett[4])+vett[3]+"\n")
+
+
 
 if __name__ == '__main__':
     richieste = leggiStrada("/home/viga/PycharmProjects/HashCode/a_example.in")
-    print(richieste)
+    funzione(taxi,richieste,"/home/viga/PycharmProjects/HashCode/a_example.txt")
+
+
+
+
 
